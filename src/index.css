@@ -1,0 +1,55 @@
+/* ---- Design tokens -------------------------------------------------- */
+:root {
+  /* Colour: campus-at-dusk palette, not the default cream/terracotta pair */
+  --ink: #1B1F3B;          /* near-navy ink — headings, primary text */
+  --paper: #F7F5F0;        /* warm paper background */
+  --paper-raised: #FFFFFF; /* surfaces sitting above paper */
+  --line: #DDD8CC;         /* hairline borders / dividers */
+  --route: #F2B705;        /* road-marking yellow — the one accent */
+  --route-ink: #7A5B00;    /* accessible text on route-yellow */
+  --confirm: #2F6F5E;      /* teal-green — confirmation / success */
+  --muted: #6B6F80;        /* secondary text */
+  --danger: #B3402A;
+
+  --font-display: "Fraunces", "Iowan Old Style", serif;
+  --font-body: "Work Sans", "Segoe UI", sans-serif;
+
+  --radius-s: 6px;
+  --radius-m: 10px;
+}
+
+* { box-sizing: border-box; }
+
+html, body, #root { height: 100%; }
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  margin: 0;
+  color: var(--ink);
+}
+
+p { margin: 0; }
+
+button { font-family: var(--font-body); cursor: pointer; }
+input, select, textarea { font-family: var(--font-body); }
+a { color: inherit; }
+
+::selection { background: var(--route); color: var(--ink); }
+
+:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+}

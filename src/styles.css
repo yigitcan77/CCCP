@@ -1,0 +1,233 @@
+.app-shell {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 32px 16px 64px;
+}
+
+.app-header {
+  width: 100%;
+  max-width: 520px;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 28px;
+}
+
+.app-header h1 {
+  font-size: 28px;
+  letter-spacing: -0.01em;
+}
+
+.app-header .tagline {
+  font-size: 13px;
+  color: var(--muted);
+  max-width: 200px;
+  text-align: right;
+  line-height: 1.35;
+}
+
+.screen {
+  width: 100%;
+  max-width: 520px;
+}
+
+/* ---- Role toggle ---- */
+.role-toggle {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 24px;
+}
+
+.role-btn {
+  flex: 1;
+  border: 1.5px solid var(--line);
+  background: var(--paper-raised);
+  border-radius: var(--radius-m);
+  padding: 16px 14px;
+  text-align: left;
+  transition: border-color 120ms ease, background 120ms ease;
+}
+
+.role-btn strong {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 17px;
+  margin-bottom: 3px;
+}
+
+.role-btn span {
+  font-size: 12.5px;
+  color: var(--muted);
+}
+
+.role-btn[data-active="true"] {
+  border-color: var(--ink);
+  background: var(--ink);
+}
+.role-btn[data-active="true"] strong,
+.role-btn[data-active="true"] span {
+  color: var(--paper);
+}
+
+/* ---- Form ---- */
+.field-group { margin-bottom: 18px; }
+
+.field-group label {
+  display: block;
+  font-size: 13px;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+
+.field-group textarea,
+.field-group input,
+.field-group select {
+  width: 100%;
+  border: 1.5px solid var(--line);
+  border-radius: var(--radius-s);
+  padding: 11px 12px;
+  font-size: 15px;
+  background: var(--paper-raised);
+  color: var(--ink);
+}
+
+.field-group textarea { resize: vertical; min-height: 76px; }
+
+.field-row { display: flex; gap: 12px; }
+.field-row .field-group { flex: 1; }
+
+.primary-btn {
+  width: 100%;
+  border: none;
+  border-radius: var(--radius-s);
+  padding: 14px 16px;
+  background: var(--ink);
+  color: var(--paper);
+  font-size: 15.5px;
+  font-weight: 500;
+}
+.primary-btn:disabled { opacity: 0.5; cursor: default; }
+
+.ghost-btn {
+  border: 1.5px solid var(--line);
+  background: transparent;
+  border-radius: var(--radius-s);
+  padding: 10px 14px;
+  font-size: 14px;
+  color: var(--ink);
+}
+
+.parse-note {
+  margin-top: 10px;
+  font-size: 12.5px;
+  color: var(--muted);
+  border-left: 2px solid var(--route);
+  padding-left: 8px;
+}
+
+/* ---- Results: route-line list ---- */
+.results-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.match-row {
+  display: grid;
+  grid-template-columns: 28px 1fr auto;
+  gap: 14px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--line);
+}
+.match-row:first-child { padding-top: 0; }
+
+.route-dot-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.route-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--route);
+  flex-shrink: 0;
+}
+.route-dot-line {
+  flex: 1;
+  width: 1.5px;
+  background: var(--line);
+  margin: 4px 0;
+}
+
+.match-main strong {
+  font-family: var(--font-display);
+  font-size: 17px;
+}
+.match-meta {
+  font-size: 13px;
+  color: var(--muted);
+  margin-top: 2px;
+}
+.match-explain {
+  font-size: 13px;
+  margin-top: 6px;
+  color: var(--ink);
+}
+
+.match-score-col {
+  text-align: right;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+}
+.match-score {
+  font-family: var(--font-display);
+  font-size: 22px;
+}
+.match-price {
+  font-size: 13px;
+  color: var(--muted);
+}
+
+/* ---- Confirm screen ---- */
+.confirm-badge {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--confirm);
+  color: var(--paper);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  margin-bottom: 18px;
+}
+
+.confirm-card {
+  border: 1.5px solid var(--line);
+  border-radius: var(--radius-m);
+  padding: 20px;
+  margin: 20px 0;
+  background: var(--paper-raised);
+}
+.confirm-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px dashed var(--line);
+  font-size: 14.5px;
+}
+.confirm-row:last-child { border-bottom: none; }
+.confirm-row span:first-child { color: var(--muted); }
+
+.future-strip {
+  margin-top: 40px;
+  padding-top: 18px;
+  border-top: 1px solid var(--line);
+  font-size: 12.5px;
+  color: var(--muted);
+  line-height: 1.5;
+}

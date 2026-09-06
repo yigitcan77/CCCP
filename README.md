@@ -13,19 +13,25 @@ cp .env.example .env
 
 `.env` dosyasını açıp en az bir LLM sağlayıcısının API anahtarını girin:
 
-- **Groq (önerilir):** https://console.groq.com/keys → ücretsiz, hızlı, `llama-3.1-8b-instant` modeli kullanılıyor.
-- **Gemini:** https://aistudio.google.com/apikey → ücretsiz plan, `VITE_LLM_PROVIDER=gemini` yapmayı unutmayın.
+- **Groq (önerilir):** https://console.groq.com/keys → ücretsiz, hızlı, `openai/gpt-oss-20b` modeli kullanılıyor.
+- **Gemini:** https://aistudio.google.com/apikey → ücretsiz plan, `LLM_PROVIDER=gemini` yapmayı unutmayın.
 
 ```bash
 npm run dev
 ```
 
-## ⚠️ Önemli güvenlik notu
+## Mimari notu: LLM çağrısı neden sunucu tarafında?
 
-Vite'ta `VITE_*` ile başlayan ortam değişkenleri **derlenen JS dosyasına gömülür** — yani API anahtarınız Vercel'e deploy ettiğinizde herkesin görebileceği şekilde tarayıcıda görünür olur. Hackathon MVP'si için bu kabul edilebilir bir risktir (ücretsiz plan, düşük limit), ama:
-- Sadece bu proje için ayrı, ücretsiz bir anahtar oluşturun.
-- Hackathon bitince o anahtarı silin/rotate edin.
-- Gerçek bir ürüne dönüştürecekseniz, LLM çağrısını bir backend/proxy arkasına almanız gerekir.
+İlk versiyonda LLM çağrısı doğrudan tarayıcıdan yapılıyordu. İki sorun çıktı:
+1. **Groq, tarayıcıdan (CORS) gelen isteklere izin vermiyor** — sadece sunucu-sunucu isteklerini kabul ediyor.
+2. API anahtarı tarayıcıya gönderildiği için derlenen JS dosyasında herkese açık görünüyordu.
+
+Bu yüzden LLM çağrısı artık `/api/parse` üzerinden, sunucu tarafında yapılıyor (`api/_llm.js`).
+Bu endpoint iki ortamda da aynı şekilde çalışır:
+- **`npm run dev` sırasında:** `vite.config.js` içindeki küçük bir dev-proxy bu isteği yakalar.
+- **Vercel'e deploy edildiğinde:** `api/parse.js`, Vercel tarafından otomatik olarak bir serverless function olarak algılanır, ekstra ayar gerekmez.
+
+API anahtarları artık tarayıcıya hiç gönderilmiyor — bu hem CORS sorununu çözüyor hem de daha güvenli.
 
 ## Vercel'e deploy
 
@@ -33,7 +39,7 @@ Vite'ta `VITE_*` ile başlayan ortam değişkenleri **derlenen JS dosyasına gö
 npm run build
 ```
 
-Ardından [vercel.com](https://vercel.com) → "Add New Project" → bu GitHub reposunu seçin → **Environment Variables** kısmına `.env` içindeki değerleri tek tek girin → Deploy.
+Ardından [vercel.com](https://vercel.com) → "Add New Project" → bu GitHub reposunu seçin → **Environment Variables** kısmına `.env` içindeki değerleri (GROQ_API_KEY, LLM_PROVIDER vb. — VITE_ öneki OLMADAN) tek tek girin → Deploy. `api/` klasörü Vercel tarafından otomatik olarak serverless function olarak algılanır, ayrıca bir ayara gerek yok.
 
 ## Mimari
 
@@ -42,11 +48,14 @@ src/
   data/syntheticUsers.js   → 42 sentetik sürücü/yolcu (rota, saat, puan, tercihler)
   lib/scoring.js           → Skorlama: rota %40, zaman %30, puan %15, tercihler %15
   lib/pricing.js           → Mesafeye dayalı basit fiyat formülü (taksiden ucuz)
-  lib/llmParse.js          → TEK LLM çağrısı: serbest metin → JSON (+ demo cache + regex fallback)
+  lib/llmParse.js          → İstemci tarafı: /api/parse'ı çağırır (+ demo cache + regex fallback)
   lib/explainMatch.js      → Şablona dayalı "neden eşleşti" açıklaması (LLM YOK)
   screens/HomeScreen.jsx   → Rol seçimi + form (yolcu: serbest metin / sürücü: rota formu)
   screens/ResultsScreen.jsx→ Sıralı eşleşme listesi + skor + fiyat + "Rezervasyon Yap"
   screens/ConfirmScreen.jsx→ Rezervasyon / rota yayınlama onayı
+api/
+  _llm.js                  → Sunucu tarafı: gerçek Groq/Gemini çağrısı (anahtarlar burada)
+  parse.js                 → Vercel serverless function girişi (production)
 ```
 
 ## Demo sırasında dikkat
